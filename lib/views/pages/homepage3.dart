@@ -134,19 +134,17 @@ class _HomePage3State extends State<HomePage3> {
     // _showToast(context,
     //     'Please check your internet connection!! or you dont have any feeds available');
     //  } else if (isError1 == true) {
-    res2 = Provider.of<MessagesProvider>(context, listen: false).addMessage(
-        Message(
-            message: _textEditingController.text,
-            group: '0',
-            responding_to: null,
-            update_by: '${feedsBox.get('userID')}',
-            profile_pic: null,
-            first_name: '${feedsBox.get('firstname')}',
-            last_name: '${feedsBox.get('firstname')}',
-            post_id:
-                DateTime.now().millisecondsSinceEpoch + DateTime.now().second,
-            profession_n: '[C.E.O. at NaHere]',
-            time: DateTime.now()));
+    Provider.of<MessagesProvider>(context, listen: false).addMessage(Message(
+        message: _textEditingController.text,
+        group: '0',
+        responding_to: null,
+        update_by: '${feedsBox.get('userID')}',
+        profile_pic: null,
+        first_name: '${feedsBox.get('firstname')}',
+        last_name: '${feedsBox.get('firstname')}',
+        post_id: DateTime.now().millisecondsSinceEpoch + DateTime.now().second,
+        profession_n: '[C.E.O. at NaHere]',
+        time: DateTime.now()));
     //  }
 
     _textEditingController.clear();
@@ -209,7 +207,7 @@ class _HomePage3State extends State<HomePage3> {
   }
 
   double screenHeight, screenWidth;
-  dynamic res2;
+
   dynamic data;
   dynamic data2;
   bool isLoading = false;
@@ -271,8 +269,7 @@ class _HomePage3State extends State<HomePage3> {
             ]),
       );
     }
-    return Container(
-        height: screenHeight / 1.25, child: buildListView(res1, res2));
+    return Container(height: screenHeight / 1.25, child: buildListView(res1));
   }
 
   @override
@@ -629,7 +626,9 @@ class _HomePage3State extends State<HomePage3> {
     GlobalKey<ScaffoldState>().currentState.showSnackBar(snackBar);
   }
 
-  ListView buildListView(res1, res2) {
+  ListView buildListView(
+    res1,
+  ) {
     return ListView.separated(
       // shrinkWrap: true,
       // reverse: true,
