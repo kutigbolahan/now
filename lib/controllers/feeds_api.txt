@@ -1,0 +1,40 @@
+// import 'dart:convert';
+
+// import 'package:flutter/cupertino.dart';
+
+// import 'package:nahere/models/feedsmodel/feeds.dart';
+// import 'package:nahere/models/feedsmodel/serializers.dart';
+
+// import 'package:http/http.dart' as http;
+// import 'package:shared_preferences/shared_preferences.dart';
+// class FeedsApi extends ChangeNotifier{
+// var userId;
+
+//   void getUserId() async {
+//     SharedPreferences localStorage = await SharedPreferences.getInstance();
+//     var userJson = localStorage.getString('data');
+//     var user = json.decode(userJson);
+   
+//       return  user;
+//    // notifyListeners();
+    
+//   }
+//    Future<Feeds> getFeeds() async {
+//     final url =
+//          //'https://empl-dev.site/api/feeds/list_feeds?company_id=&user_id=${userId['user_id']}&page=1&limit=25';
+//          'https://empl-dev.site/api/feeds/list_feeds?company_id=&user_id=${userId['user_id']}';
+//        // 'https://empl-dev.site/api/feeds/list_feeds?company_id=&user_id=45&page=1&limit=25';
+//     try {
+//       var res = await http.get(url);
+//       Feeds feeds = standardSerializers.deserializeWith(
+//           Feeds.serializer, jsonDecode(res.body));
+//       print(feeds);
+//       return feeds;
+//     } catch (e) {
+//       print(e);
+//       return e.message;
+//     }
+//   }
+//     notifyListeners();
+
+// }
