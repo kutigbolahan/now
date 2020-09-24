@@ -14,6 +14,7 @@ import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:nahere/controllers/api.dart';
 import 'package:nahere/controllers/auth/auth.dart';
 import 'package:nahere/views/pages/homepage2.dart';
+import 'package:nahere/views/pages/homepage3.dart';
 import 'package:nahere/views/pages/uploadfilepage.dart';
 
 import 'package:provider/provider.dart';
@@ -175,7 +176,7 @@ class _DetailsPageState extends State<DetailsPage> {
         _showToast(context, 'Posted successfully');
         Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => HomePage2()),
+            MaterialPageRoute(builder: (context) => HomePage3()),
             (route) => false);
       } else {
         _showToast(context, body['msg']);
@@ -339,7 +340,7 @@ class _PostFeedsState extends State<PostFeeds> {
 
   void goToMainPage(BuildContext context) {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => HomePage2()));
+        context, MaterialPageRoute(builder: (context) => HomePage3()));
   }
 
   _submit1() async {
@@ -368,7 +369,7 @@ class _PostFeedsState extends State<PostFeeds> {
 
         Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => HomePage2()),
+            MaterialPageRoute(builder: (context) => HomePage3()),
             (route) => false);
       } else {
         _showToast(context, body['msg']);

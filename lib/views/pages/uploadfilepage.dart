@@ -7,6 +7,7 @@ import 'package:hive/hive.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nahere/controllers/api.dart';
 import 'package:nahere/views/pages/homepage2.dart';
+import 'package:nahere/views/pages/homepage3.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -151,7 +152,7 @@ class _UploadFilePageState extends State<UploadFilePage> {
         // _showToast(context, 'Posted successfully');
         Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => HomePage2()),
+            MaterialPageRoute(builder: (context) => HomePage3()),
             (route) => false);
       } else {
         _showToast(context, body['msg']);

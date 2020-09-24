@@ -131,7 +131,7 @@ class _DifferentGroupPagesState extends State<DifferentGroupPages> {
   dynamic data2;
   bool isLoading = false;
   bool isError = false;
-  Future<SocialFeeds1> differentGroupfeeds() async {
+  Future<SocialFeeds2> differentGroupfeeds() async {
     print('${feedsBox.get('userID')}');
     print('${feedsBox.get('GROUPIDEACH')}');
 
@@ -152,7 +152,7 @@ class _DifferentGroupPagesState extends State<DifferentGroupPages> {
         //  return SocialFeeds1.fromJson(json.decode(response.body));
         data = json.decode(response.body);
         data2 = json.decode(response.body)['data'];
-        res1 = SocialFeeds1.fromJson(data);
+        res1 = SocialFeeds2.fromJson(data);
 
         for (int index = 0; index < data2.length; index++) {
           if (data2[index]['socialFiles'] != null) {
