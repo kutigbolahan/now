@@ -15,7 +15,7 @@ class MessagesItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mess = Provider.of<MessagesProvider>(context).allMessages;
+    //final mess = Provider.of<MessagesProvider>(context).socialMessages;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ListTile(

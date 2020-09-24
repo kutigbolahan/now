@@ -10,7 +10,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:nahere/controllers/api.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:nahere/models/social.dart';
+//import 'package:nahere/models/social.dart';
 import 'package:nahere/views/pages/checkimagescreen.dart';
 import 'package:nahere/views/pages/postNewFeedsPage.dart';
 import 'package:nahere/views/socketsThings/data/socketsManager.dart';
@@ -23,6 +23,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:nahere/models/mo.dart';
+import 'package:nahere/models/mo.dart' as data5;
 
 class HomePage3 extends StatefulWidget {
   final Function(String) onSendMessage;
@@ -134,20 +136,40 @@ class _HomePage3State extends State<HomePage3> {
     // _showToast(context,
     //     'Please check your internet connection!! or you dont have any feeds available');
     //  } else if (isError1 == true) {
-    Provider.of<MessagesProvider>(context, listen: false).addMessage(Message(
-        message: _textEditingController.text,
-        group: '0',
-        responding_to: null,
-        update_by: '${feedsBox.get('userID')}',
-        profile_pic: null,
-        first_name: '${feedsBox.get('firstname')}',
-        last_name: '${feedsBox.get('firstname')}',
-        post_id: DateTime.now().millisecondsSinceEpoch + DateTime.now().second,
-        profession_n: '[C.E.O. at NaHere]',
-        time: DateTime.now()));
+    // Provider.of<MessagesProvider>(context, listen: false).addMessage(
+    //   Message(
+    //     message: _textEditingController.text,
+    //     group: '0',
+    //     responding_to: null,
+    //     update_by: '${feedsBox.get('userID')}',
+    //     profile_pic: null,
+    //     first_name: '${feedsBox.get('firstname')}',
+    //     last_name: '${feedsBox.get('firstname')}',
+    //     post_id: DateTime.now().millisecondsSinceEpoch + DateTime.now().second,
+    //     profession_n: '[C.E.O. at NaHere]',
+    //     time: DateTime.now()));
     //  }
+    res1.data.add(Data(
+      message: _textEditingController.text,
+      firstname: '${feedsBox.get('firstname')}',
+      lastname: '${feedsBox.get('firstname')}',
+      profilePic: null,
+      profession: '[C.E.O. at NaHere]',
+      // updateTime: DateTime.now()
+
+      // group: '0',
+      // respondingto: null,
+      // updateby: '${feedsBox.get('userID')}',
+      // profile_pic: null,
+      // first_name: '${feedsBox.get('firstname')}',
+      // last_name: '${feedsBox.get('firstname')}',
+      // post_id: DateTime.now().millisecondsSinceEpoch + DateTime.now().second,
+      // profession_n: '[C.E.O. at NaHere]',
+      // time: DateTime.now())
+    ));
 
     _textEditingController.clear();
+    setState(() {});
     // isError = true;
   }
 
@@ -164,8 +186,9 @@ class _HomePage3State extends State<HomePage3> {
     _socketIoManager = SocketIoManager(serverUrl: SERVER_URL)
       ..init()
       ..subscribe('chat', (Map<String, dynamic> socket2data) {
-        Provider.of<MessagesProvider>(context, listen: false)
-            .addMessage(Message.fromJson(socket2data));
+        res1.data.add(Data.fromJson(socket2data));
+        // Provider.of<MessagesProvider>(context, listen: false)
+        //     .addMessage(Message.fromJson(socket2data));
         // _scrollController.animateTo(
         //   0.0,
         //   duration: Duration(milliseconds: 200),
@@ -209,15 +232,15 @@ class _HomePage3State extends State<HomePage3> {
   double screenHeight, screenWidth;
 
   dynamic data;
-  dynamic data2;
+  List data2;
   bool isLoading = false;
   bool isError = false;
-  dynamic res1;
+  SocialFeeds2 res1;
   var listOfImages = [];
   String urlPrefix = 'https://empl-dev.site/';
-  Message _message = Message();
+  // Message _message = Message();
 
-  Future<SocialFeeds1> publicFeeds() async {
+  Future<SocialFeeds2> publicFeeds() async {
     // print('${feedsBox.get('userID')}');
     String url =
         // 'https://empl-dev.site/api/social/fetch_updates?user=${feedsBox.get('userID')}&group_id=0&page=0&limit=250000000';
@@ -229,13 +252,18 @@ class _HomePage3State extends State<HomePage3> {
       if (response.statusCode == 200) {
         data = json.decode(response.body);
         data2 = json.decode(response.body)['data'];
-        res1 = SocialFeeds1.fromJson(data);
-        for (int index = 0; index < data2.length; index++) {
-          if (data2[index]['socialFiles'] != null) {
-            for (int i = 0; i < data2[index]['socialFiles'].length; i++) {
-              listOfImages.add(data2[index]['socialFiles'][i]['val']);
+        res1 = SocialFeeds2.fromJson(data);
+        for (int index = 0; index < res1.data.length; index++) {
+          if (res1.data[index].socialFiles != null) {
+            for (int i = 0; i < res1.data[index].socialFiles.length; i++) {
+              listOfImages.add(res1.data[index].socialFiles[index].val);
             }
           }
+          // if (data2[index]['socialFiles'] != null) {
+          //   for (int i = 0; i < data2[index]['socialFiles'].length; i++) {
+          //     listOfImages.add(data2[index]['socialFiles'][i]['val']);
+          //   }
+          // }
         }
         setState(() {
           isLoading = true;
@@ -249,8 +277,9 @@ class _HomePage3State extends State<HomePage3> {
       setState(() {
         isError = true;
       });
-      return _showToast(context,
-          'Please check your internet connection!! or you dont have any feeds available');
+      // _showToast(context,
+      //     'Please check your internet connection!! or you dont have any feeds available');
+      return e;
     }
   }
 
@@ -306,28 +335,28 @@ class _HomePage3State extends State<HomePage3> {
               child: ListView(
                 shrinkWrap: true,
                 children: [
-                  // tyy(),
-                  Consumer<MessagesProvider>(
-                    builder: (_, messagesProvider, __) => ListView.separated(
-                        shrinkWrap: true,
-                        physics: BouncingScrollPhysics(),
-                        separatorBuilder: (context, index) => Divider(
-                              indent: 10.0,
-                              endIndent: 10.0,
-                              color:
-                                  Provider.of<ThemeNotifier>(context).lightTheme
-                                      ? Colors.black12
-                                      : Colors.white24,
-                            ),
-                        reverse: true,
-                        controller: _scrollController,
-                        itemCount: messagesProvider.allMessages.length,
-                        itemBuilder: (ctx, index) => MessagesItem(
-                              messagesProvider.allMessages[index],
-                              messagesProvider.allMessages[index]
-                                  .isUserMessage(_textEditingController.text),
-                            )),
-                  ),
+                  tyy(),
+                  // Consumer<MessagesProvider>(
+                  //   builder: (_, messagesProvider, __) => ListView.separated(
+                  //       shrinkWrap: true,
+                  //       physics: BouncingScrollPhysics(),
+                  //       separatorBuilder: (context, index) => Divider(
+                  //             indent: 10.0,
+                  //             endIndent: 10.0,
+                  //             color:
+                  //                 Provider.of<ThemeNotifier>(context).lightTheme
+                  //                     ? Colors.black12
+                  //                     : Colors.white24,
+                  //           ),
+                  //       reverse: true,
+                  //       controller: _scrollController,
+                  //       itemCount: messagesProvider.allMessages.length,
+                  //       itemBuilder: (ctx, index) => MessagesItem(
+                  //             messagesProvider.allMessages[index],
+                  //             messagesProvider.allMessages[index]
+                  //                 .isUserMessage(_textEditingController.text),
+                  //           )),
+                  // ),
                 ],
               )),
           Align(
@@ -627,7 +656,7 @@ class _HomePage3State extends State<HomePage3> {
   }
 
   ListView buildListView(
-    res1,
+    SocialFeeds2 res1,
   ) {
     return ListView.separated(
       // shrinkWrap: true,
@@ -641,7 +670,7 @@ class _HomePage3State extends State<HomePage3> {
             : Colors.white24,
       ),
       controller: _scrollcontroller,
-      itemCount: data2.length != null ? data2.length : Text('no Feeds'),
+      itemCount: res1.data.length != null ? res1.data.length : Text('no Feeds'),
       itemBuilder: (BuildContext context, int index) {
         return Column(
             // mainAxisAlignment: MainAxisAlignment.center,
@@ -674,55 +703,55 @@ class _HomePage3State extends State<HomePage3> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      Container(
-                        child: urlPrefix + data2[index]['profile_pic'] != null
-                            ? CachedNetworkImage(
-                                imageUrl:
-                                    urlPrefix + data2[index]['profile_pic'],
-                                imageBuilder: (context, imageProvider) =>
-                                    Container(
-                                  width: 50.0,
-                                  height: 50.0,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(
-                                        image: imageProvider,
-                                        fit: BoxFit.cover),
-                                  ),
-                                ),
-                                placeholder: (context, url) =>
-                                    //  CircleAvatar(
-                                    //   radius: 25,
-                                    //   backgroundColor: Colors.white,
-                                    //   backgroundImage: AssetImage(
-                                    //       'assets/images/no_image.png'),
-                                    // ),
-                                    CircularProgressIndicator(
-                                  strokeWidth: 1.5,
-                                  backgroundColor: Color(0xff01A0C7),
-                                ),
-                                errorWidget: (context, url, error) =>
-                                    CircleAvatar(
-                                  radius: 25,
-                                  backgroundColor: Colors.white,
-                                  backgroundImage:
-                                      AssetImage('assets/images/no_image.png'),
-                                ),
-                              )
-                            : Container(
-                                child: Center(
-                                  child: SpinKitFadingCircle(
-                                    color: Color(0xff01A0C7),
-                                    size: 50,
-                                  ),
-                                ),
-                              ),
-                      ),
+                      // Container(
+                      //   child:  res1.data[index].profilePic != null
+                      //       ? CachedNetworkImage(
+                      //           imageUrl:
+                      //               urlPrefix + res1.data[index].profilePic,
+                      //           imageBuilder: (context, imageProvider) =>
+                      //               Container(
+                      //             width: 50.0,
+                      //             height: 50.0,
+                      //             decoration: BoxDecoration(
+                      //               shape: BoxShape.circle,
+                      //               image: DecorationImage(
+                      //                   image: imageProvider,
+                      //                   fit: BoxFit.cover),
+                      //             ),
+                      //           ),
+                      //           placeholder: (context, url) =>
+                      //               //  CircleAvatar(
+                      //               //   radius: 25,
+                      //               //   backgroundColor: Colors.white,
+                      //               //   backgroundImage: AssetImage(
+                      //               //       'assets/images/no_image.png'),
+                      //               // ),
+                      //               CircularProgressIndicator(
+                      //             strokeWidth: 1.5,
+                      //             backgroundColor: Color(0xff01A0C7),
+                      //           ),
+                      //           errorWidget: (context, url, error) =>
+                      //               CircleAvatar(
+                      //             radius: 25,
+                      //             backgroundColor: Colors.white,
+                      //             backgroundImage:
+                      //                 AssetImage('assets/images/no_image.png'),
+                      //           ),
+                      //         )
+                      //       : Container(
+                      //           child: Center(
+                      //             child: SpinKitFadingCircle(
+                      //               color: Color(0xff01A0C7),
+                      //               size: 50,
+                      //             ),
+                      //           ),
+                      //         ),
+                      // ),
                     ]),
                 title: Row(
                   children: <Widget>[
                     Text(
-                      data2[index]['firstname'],
+                      res1.data[index].firstname,
                       style: GoogleFonts.montserrat(
                           fontSize: 13, fontWeight: FontWeight.w500),
                     ),
@@ -730,21 +759,21 @@ class _HomePage3State extends State<HomePage3> {
                       width: 5,
                     ),
                     Text(
-                      data2[index]['lastname'],
+                      res1.data[index].lastname,
                       style: GoogleFonts.montserrat(
                           fontSize: 13, fontWeight: FontWeight.w500),
                     ),
                     SizedBox(
                       width: 5,
                     ),
-                    Text(
-                      timeago
-                          .format(DateTime.parse(data2[index]['update_time'])),
-                      // data2[index]['updateTime'].toString(),
-                      //  timeago.format(DateTime.parse(data2[index]['updateTime'])),
-                      style: GoogleFonts.montserrat(
-                          fontSize: 10, fontWeight: FontWeight.w200),
-                    )
+                    // Text(
+                    //   timeago
+                    //       .format(DateTime.parse(res1.data[index].updateTime)),
+                    //   // data2[index]['updateTime'].toString(),
+                    //   //  timeago.format(DateTime.parse(data2[index]['updateTime'])),
+                    //   style: GoogleFonts.montserrat(
+                    //       fontSize: 10, fontWeight: FontWeight.w200),
+                    // )
                   ],
                 ),
                 subtitle: Column(
@@ -752,8 +781,8 @@ class _HomePage3State extends State<HomePage3> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      data2[index]['profession'] != null
-                          ? data2[index]['profession']
+                      res1.data[index].profession != null
+                          ? res1.data[index].profession
                           : '',
                       // _parseHtmlString(snapshot.data.data[index].lastname),
                       style: GoogleFonts.montserrat(
@@ -763,14 +792,14 @@ class _HomePage3State extends State<HomePage3> {
                       height: 5,
                     ),
                     Text(
-                      data2[index]['message'],
+                      res1.data[index].message,
                       style: GoogleFonts.montserrat(
                           fontSize: 14, fontWeight: FontWeight.w300),
                     ),
                     SizedBox(
                       height: 7,
                     ),
-                    data['data'][index]['socialFiles'] != null
+                    res1.data[index].socialFiles != null
                         ? GridView.count(
                             physics: NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
@@ -783,27 +812,6 @@ class _HomePage3State extends State<HomePage3> {
                   ],
                 ),
               ),
-              //   Consumer<MessagesProvider>(
-              //     builder: (_, messagesProvider, __) => ListView.separated(
-              //       shrinkWrap: true,
-              //       physics: BouncingScrollPhysics(),
-              //       separatorBuilder: (context, index) => Divider(
-              //         indent: 10.0,
-              //         endIndent: 10.0,
-              //         color: Provider.of<ThemeNotifier>(context).lightTheme
-              //             ? Colors.black12
-              //             : Colors.white24,
-              //       ),
-              //       reverse: false,
-              //       controller: _scrollController,
-              //       itemCount: messagesProvider.allMessages.length,
-              //       itemBuilder: (ctx, index) => MessagesItem(
-              //         messagesProvider.allMessages[index],
-              //         messagesProvider.allMessages[index]
-              //             .isUserMessage(_textEditingController.text),
-              //       ),
-              //     ),
-              //   ),
             ]);
       },
     );
